@@ -2,6 +2,7 @@ module Language.FaultTree
   ( Event (..)
   , imply
   , dot
+  , txt
   , cutsets
   ) where
 
@@ -25,6 +26,20 @@ data Event
 -- | Logical implication.
 imply :: Event -> Event -> Event
 imply a b = Or [Not a, b]
+
+-- | Render text of 'Event' (fault) trees.
+txt :: [Event] -> String
+txt = concatMap txt'
+  where
+  txt' :: Event -> String
+  txt' a = case a of
+    Leaf   name   -> printf "%s\n"      name
+    Branch name a -> printf "%s { \n%s}\n"  name $ indent $ txt' a
+    Not a         -> printf "NOT {\n%s}\n"      $ indent $ txt' a
+    And a         -> printf "AND {\n%s}\n"      $ indent $ txt  a
+    Or  a         -> printf "OR {\n%s}\n"       $ indent $ txt  a
+  indent :: String -> String
+  indent a = unlines [ "\t" ++ a | a <- lines a ]
 
 -- | Render a Graphviz dot file from a set of 'Event' (fault) trees.
 dot :: [Event] -> String

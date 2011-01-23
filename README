@@ -4,6 +4,12 @@ Yices (required) is the backend SMT solver used to calculate cutsets.
 
 Release Notes:
 
+0.0.1    ???
+
+- Text rendering of fault tree.
+
+
+
 0.0.0    01/04/2011
 
 - Initial release.
